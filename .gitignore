@@ -31,3 +31,20 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# Variables d'environnement
+.env
+*.env
+
+# Fichiers uploadés
+uploads/
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.Zone.Identifier
