@@ -1,16 +1,15 @@
-
-services:
-  postgres:
-    image: postgres:15
-    container_name: datashare-db
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+services:          # liste des services à lancer
+  postgres:        # nom du service
+    image: postgres:15        # utilise l'image PostgreSQL version 15
+    container_name: datashare-db  # nom du conteneur
+    environment:              # variables d'environnement
+      POSTGRES_DB: ${POSTGRES_DB}       # nom de la base de données
+      POSTGRES_USER: ${POSTGRES_USER}   # utilisateur
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}  # mot de passe
     ports:
-      - "${POSTGRES_PORT}:5432"
+      - "${POSTGRES_PORT}:5432"  # expose le port 5432 sur ta machine
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data  # sauvegarde les données
 
 volumes:
-  postgres_data:
+  postgres_data:   # volume persistant (données survivent au redémarrage)

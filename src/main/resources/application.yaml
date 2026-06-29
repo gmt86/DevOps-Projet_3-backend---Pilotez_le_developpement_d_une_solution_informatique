@@ -1,16 +1,21 @@
 spring:
   application:
-    name: datashare-backend
-  datasource:
-    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
-    driver-class-name: org.postgresql.Driver
-  jpa:
+    name: datashare-backend  # nom de l'application
+
+  datasource:                # configuration de la connexion BDD
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB}  
+    # adresse de la BDD : localhost = même machine, 5432 = port PostgreSQL
+    username: ${POSTGRES_USER}    # utilisateur BDD
+    password: ${POSTGRES_PASSWORD} # mot de passe BDD
+    driver-class-name: org.postgresql.Driver  # pilote PostgreSQL
+
+  jpa:                       # configuration de JPA (ORM)
     hibernate:
-      ddl-auto: update
-    show-sql: true
-    open-in-view: false
+      ddl-auto: update       # crée/met à jour les tables automatiquement
+    show-sql: true           # affiche les requêtes SQL dans les logs
+    open-in-view: false      # Fermée la connexion dès que possible.  
+                             #ça évite de saturer le pool de connexions PostgreSQL 
+                             #quand plusieurs utilisateurs se connectent en même temps.
 
 server:
-  port: 8080
+  port: 8080                 # port d'écoute de Spring Boot
