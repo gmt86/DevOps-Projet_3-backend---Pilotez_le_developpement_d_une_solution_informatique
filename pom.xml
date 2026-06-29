@@ -68,10 +68,34 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- MapStruct : bibliothèque de mapping automatique entre entités et DTOs -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>1.5.5.Final</version>
+		</dependency>
+
+		<!-- JWT : génération et validation des tokens d'authentification -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+
+		<!-- JWT : implémentation (chargée à l'exécution uniquement) -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- JWT : sérialisation/désérialisation JSON via Jackson -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope>
 		</dependency>
 
 	</dependencies>
@@ -127,20 +151,24 @@
 				</executions>
 			</plugin>
 			
+			<!-- Plugin Maven pour la compilation avec MapStruct et Lombok -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<annotationProcessorPaths>
+						<!-- Processeur MapStruct : génère le code de mapping à la compilation -->
 						<path>
 							<groupId>org.mapstruct</groupId>
 							<artifactId>mapstruct-processor</artifactId>
 							<version>1.5.5.Final</version>
 						</path>
+						<!-- Processeur Lombok : génère getters, setters, constructeurs... -->
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 						</path>
+						 <!-- Binding Lombok-MapStruct : assure la compatibilité entre les deux -->
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok-mapstruct-binding</artifactId>

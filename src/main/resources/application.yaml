@@ -19,3 +19,9 @@ spring:
 
 server:
   port: 8080                 # port d'écoute de Spring Boot
+
+jwt:
+  
+ secret: ${JWT_SECRET} # Clé secrète pour signer et valider les tokens JWT
+  
+ expiration: ${JWT_EXPIRATION} # Durée d'expiration du token en millisecondes
