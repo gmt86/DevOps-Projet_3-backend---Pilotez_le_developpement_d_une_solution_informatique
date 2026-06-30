@@ -32,20 +32,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserDetailsService userDetailsService;
+    
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    /**
-     * Configure le fournisseur d'authentification avec UserDetailsService et BCrypt.
-     */
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
-
+   
     /**
      * Expose l'AuthenticationManager pour l'utiliser dans les services.
      */
@@ -87,8 +76,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(management -> management
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider())
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))                
                 .authorizeHttpRequests(authorize -> authorize
                         // Endpoints publics
                         .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
