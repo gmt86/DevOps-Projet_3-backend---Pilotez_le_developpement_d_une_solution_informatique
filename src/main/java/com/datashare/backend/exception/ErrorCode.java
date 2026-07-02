@@ -18,9 +18,14 @@ public enum ErrorCode {
     FILE_TOO_LARGE(400, "La taille du fichier dépasse la limite autorisée"),
     INVALID_FILE_TYPE(400, "Type de fichier non autorisé"),
 
+    
     // Général
     UNAUTHORIZED(401, "Non autorisé"),
-    BAD_REQUEST(400, "Requête invalide");
+    BAD_REQUEST(400, "Requête invalide"),
+
+    // Erreur base de données
+    DATABASE_ERROR(500, "Une erreur est survenue lors de l'enregistrement.");
+
 
     private final int statusCode;
     private final String message;

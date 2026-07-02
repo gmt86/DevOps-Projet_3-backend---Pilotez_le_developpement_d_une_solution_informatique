@@ -11,10 +11,14 @@ import com.datashare.backend.repository.UtilisateurRepository;
 import com.datashare.backend.service.impl.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 
 /**
  * Implémentation du service d'authentification.
@@ -47,8 +51,13 @@ public class AuthServiceImpl implements AuthService {
         Utilisateur utilisateur = utilisateurMapper.toEntity(request);
         utilisateur.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        utilisateurRepository.save(utilisateur);
-        log.info("User registered successfully: {}", request.getEmail());
+        try {
+            utilisateurRepository.save(utilisateur);
+            log.info("User registered successfully: {}", request.getEmail());
+        } catch (DataAccessException e) {
+            log.error("Database error while saving user: {}", e.getMessage());
+            throw new AppException(ErrorCode.DATABASE_ERROR);
+        }
 
         String token = jwtServiceImpl.generateToken(utilisateur);
         return new AuthResponseDTO(token);
@@ -62,19 +71,37 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponseDTO login(LoginRequestDTO request) {
         log.debug("Attempting login for user: {}", request.getEmail());
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
+        try {
+            
+            // authenticate() charge déjà l'utilisateur via CustomUserDetailsService
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
 
-        Utilisateur utilisateur = utilisateurRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new AppException(ErrorCode.INVALID_CREDENTIALS));
+            // On récupère l'utilisateur depuis le résultat de l'authentification
+            // authentication.getPrincipal() retourne l'objet UserDetails chargé par 
+            // CustomUserDetailsService — qui est notre Utilisateur
+            Utilisateur utilisateur = (Utilisateur) authentication.getPrincipal();
 
-        log.info("User logged in successfully: {}", request.getEmail());
+            log.info("User logged in successfully: {}", request.getEmail());
 
-        String token = jwtServiceImpl.generateToken(utilisateur);
-        return new AuthResponseDTO(token);
+            String token = jwtServiceImpl.generateToken(utilisateur);
+            return new AuthResponseDTO(token);
+
+
+        } catch (AuthenticationException e) {
+            /* Capture toutes les exceptions d'authentification Spring Security
+             Les exceptions possibles lors du login :
+             - BadCredentialsException -> Mauvais mot de passe
+             - DisabledException -> Compte désactivé
+             - LockedException -> Compte verrouillé
+            */
+            log.warn("Authentication failed for user: {}", request.getEmail());
+            throw new AppException(ErrorCode.INVALID_CREDENTIALS);
+        }
+       
     }
 }
