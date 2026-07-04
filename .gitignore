@@ -34,8 +34,8 @@ build/
 
 
 # Variables d'environnement
-.env
-*.env
+# .env
+# *.env
 
 # Fichiers uploadés
 uploads/
