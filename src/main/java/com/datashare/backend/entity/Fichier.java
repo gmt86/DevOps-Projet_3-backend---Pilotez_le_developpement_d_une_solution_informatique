@@ -3,7 +3,7 @@ package com.datashare.backend.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
+
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -15,23 +15,33 @@ import java.util.UUID;
 @Entity
 @Table(name = "fichiers")
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true) //dit à Lombok : Pour comparer deux objets Fichier, 
+                                                 //utilise uniquement les champs marqués avec @EqualsAndHashCode.Include
+                                                 //Sans cette annotation, Cela peut provoquer des boucles infinies 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Fichier {
 
+    // =====================
+    // IDENTIFIANT
+    // =====================
     @Id
-    @EqualsAndHashCode.Include
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @GeneratedValue(strategy = GenerationType.UUID) //Génère automatiquement la valeur de cet id en utilisant le générateur nommé UUID  
     @Column(name = "id", updatable = false, nullable = false)
+    @EqualsAndHashCode.Include
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    // =====================
+    // RELATIONS
+    // =====================
+    @ManyToOne(fetch = FetchType.LAZY)//Ne charge l'utilisateur que si on en a besoin — pas automatiquement
     @JoinColumn(name = "id_utilisateur", nullable = false)
     private Utilisateur utilisateur;
 
+    // =====================
+    // DONNÉES FICHIER
+    // =====================
     @Column(name = "nom", nullable = false)
     private String nom;
 
@@ -41,17 +51,23 @@ public class Fichier {
     @Column(name = "taille", nullable = false)
     private Long taille;
 
-    @Column(name = "date_expiration", nullable = false)
-    private LocalDateTime dateExpiration;
+    @Column(name = "chemin_stockage", nullable = false)
+    private String cheminStockage;
+
+    // =====================
+    // SÉCURITÉ & PARTAGE
+    // =====================
+    @Column(name = "token_telechargement", nullable = false, unique = true, updatable = false)
+    private UUID tokenTelechargement;
 
     @Column(name = "password")
     private String password;
 
-    @Column(name = "token_telechargement", nullable = false, unique = true, updatable = false)
-    private UUID tokenTelechargement;
-
-    @Column(name = "chemin_stockage", nullable = false)
-    private String cheminStockage;
+    // =====================
+    // DATES
+    // =====================
+    @Column(name = "date_expiration", nullable = false)
+    private LocalDateTime dateExpiration;
 
     @CreationTimestamp
     @Column(name = "date_creation", updatable = false)
