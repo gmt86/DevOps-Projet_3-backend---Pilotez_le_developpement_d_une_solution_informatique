@@ -1,8 +1,8 @@
 package com.datashare.backend.service.impl;
 
-import com.datashare.backend.dto.AuthResponseDTO;
-import com.datashare.backend.dto.LoginRequestDTO;
-import com.datashare.backend.dto.RegisterRequestDTO;
+import com.datashare.backend.dto.auth.AuthResponseDTO;
+import com.datashare.backend.dto.auth.LoginRequestDTO;
+import com.datashare.backend.dto.auth.RegisterRequestDTO;
 
 /**
  * Interface définissant les opérations d'authentification.

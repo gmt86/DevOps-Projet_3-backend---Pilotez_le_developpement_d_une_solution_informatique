@@ -9,10 +9,13 @@ public enum ErrorCode {
     // Auth
     EMAIL_ALREADY_EXISTS(409, "Email déjà utilisé"),
     INVALID_CREDENTIALS(401, "Email ou mot de passe incorrect"),
+   
 
-    // Ressources
+    // Ressources    
     RESOURCE_NOT_FOUND(404, "Ressource non trouvée"),
     FILE_NOT_FOUND(404, "Fichier non trouvé"),
+    INVALID_PASSWORD(401, "mot de passe incorrect"),
+    FILE_EXPIRED(410, "Ce lien a expiré."),
 
     // Fichiers
     FILE_TOO_LARGE(400, "La taille du fichier dépasse la limite autorisée"),
@@ -20,7 +23,7 @@ public enum ErrorCode {
 
     
     // Général
-    UNAUTHORIZED(401, "Non autorisé"),
+    UNAUTHORIZED(403, "Non autorisé"),
     BAD_REQUEST(400, "Requête invalide"),
 
 

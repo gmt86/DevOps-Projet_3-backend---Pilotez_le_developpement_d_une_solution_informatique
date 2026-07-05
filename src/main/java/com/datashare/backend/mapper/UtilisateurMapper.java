@@ -1,6 +1,6 @@
 package com.datashare.backend.mapper;
 
-import com.datashare.backend.dto.RegisterRequestDTO;
+import com.datashare.backend.dto.auth.RegisterRequestDTO;
 import com.datashare.backend.entity.Utilisateur;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

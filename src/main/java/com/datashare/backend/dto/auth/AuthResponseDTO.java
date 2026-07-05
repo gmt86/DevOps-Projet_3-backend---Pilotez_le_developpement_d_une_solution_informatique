@@ -1,4 +1,4 @@
-package com.datashare.backend.dto;
+package com.datashare.backend.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

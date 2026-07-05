@@ -1,8 +1,8 @@
 package com.datashare.backend.service;
 
-import com.datashare.backend.dto.AuthResponseDTO;
-import com.datashare.backend.dto.LoginRequestDTO;
-import com.datashare.backend.dto.RegisterRequestDTO;
+import com.datashare.backend.dto.auth.AuthResponseDTO;
+import com.datashare.backend.dto.auth.LoginRequestDTO;
+import com.datashare.backend.dto.auth.RegisterRequestDTO;
 import com.datashare.backend.entity.Utilisateur;
 import com.datashare.backend.exception.AppException;
 import com.datashare.backend.exception.ErrorCode;

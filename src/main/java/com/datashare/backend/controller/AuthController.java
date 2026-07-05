@@ -1,8 +1,8 @@
 package com.datashare.backend.controller;
 
-import com.datashare.backend.dto.AuthResponseDTO;
-import com.datashare.backend.dto.LoginRequestDTO;
-import com.datashare.backend.dto.RegisterRequestDTO;
+import com.datashare.backend.dto.auth.AuthResponseDTO;
+import com.datashare.backend.dto.auth.LoginRequestDTO;
+import com.datashare.backend.dto.auth.RegisterRequestDTO;
 import com.datashare.backend.service.impl.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
