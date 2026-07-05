@@ -18,13 +18,13 @@ public interface StorageService {
      * @param fileName le nom du fichier avec UUID
      * @return le chemin de stockage relatif
      */
-    String saveFile(MultipartFile file, Long userId, String fileName) throws IOException;
+    String saveFile(MultipartFile file, Long userId, String fileName);
 
     /**
      * Supprime un fichier du disque.
      * @param cheminStockage le chemin du fichier à supprimer
      */
-    void deleteFile(String cheminStockage) throws IOException;
+    void deleteFile(String cheminStockage);
 
     /**
      * Retourne le chemin absolu d'un fichier.

@@ -1,6 +1,8 @@
 package com.datashare.backend.service;
 
 import com.datashare.backend.configuration.StorageConfigProperties;
+import com.datashare.backend.exception.AppException;
+import com.datashare.backend.exception.ErrorCode;
 import com.datashare.backend.service.impl.StorageService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -31,20 +33,27 @@ public class StorageServiceImpl implements StorageService {
      * Crée le dossier s'il n'existe pas.
      */
     @PostConstruct //Crée le dossier uploads au démarrage si inexistant
-    public void init() throws IOException {
+    public void init() {
+    try {
         Path storagePath = Paths.get(storageConfigProperties.path());
         if (!Files.exists(storagePath)) {
             Files.createDirectories(storagePath);
             log.info("Storage directory created: {}", storagePath.toAbsolutePath());
         }
+    } catch (IOException e) {
+        log.error("Error initializing storage directory: {}", e.getMessage());
+        throw new AppException(ErrorCode.STORAGE_INIT_ERROR);
     }
+}
 
     /**
      * Sauvegarde un fichier sur le disque dans le dossier de l'utilisateur.
      * @return le chemin relatif du fichier sauvegardé
      */
     @Override
-    public String saveFile(MultipartFile file, Long userId, String fileName) throws IOException {
+    public String saveFile(MultipartFile file, Long userId, String fileName)  {
+
+        try {
         // Crée le dossier utilisateur s'il n'existe pas
         Path userDirectory = Paths.get(storageConfigProperties.path(), String.valueOf(userId));
         Files.createDirectories(userDirectory);
@@ -57,13 +66,21 @@ public class StorageServiceImpl implements StorageService {
 
         // Retourne le chemin relatif
         return Paths.get(String.valueOf(userId), fileName).toString();
+
+        } catch (IOException e) {
+        log.error("Error saving file: {}", e.getMessage());
+        throw new AppException(ErrorCode.FILE_STORAGE_ERROR);
+      }
     }
 
     /**
      * Supprime un fichier du disque.
      */
     @Override
-    public void deleteFile(String cheminStockage) throws IOException {
+    public void deleteFile(String cheminStockage)  {
+
+        try {
+
         Path filePath = Paths.get(storageConfigProperties.path(), cheminStockage);
         if (Files.exists(filePath)) {
             Files.delete(filePath);
@@ -71,6 +88,11 @@ public class StorageServiceImpl implements StorageService {
         } else {
             log.warn("File not found for deletion: {}", filePath.toAbsolutePath());
         }
+
+        } catch (IOException e) {
+        log.error("Error deleting file: {}", e.getMessage());
+        throw new AppException(ErrorCode.FILE_DELETE_ERROR);
+      }    
     }
 
     /**

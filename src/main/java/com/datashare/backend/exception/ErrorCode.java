@@ -23,6 +23,12 @@ public enum ErrorCode {
     UNAUTHORIZED(401, "Non autorisé"),
     BAD_REQUEST(400, "Requête invalide"),
 
+
+    // Stockage
+    FILE_STORAGE_ERROR(500, "Erreur lors du stockage du fichier."),
+    FILE_DELETE_ERROR(500, "Erreur lors de la suppression du fichier."),
+    STORAGE_INIT_ERROR(500, "Erreur lors de l'initialisation du dossier de stockage."),
+
     // Erreur base de données
     DATABASE_ERROR(500, "Une erreur est survenue lors de l'enregistrement.");
 
