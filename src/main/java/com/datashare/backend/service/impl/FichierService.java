@@ -18,7 +18,7 @@ public interface FichierService {
     /**
      * Upload un fichier et sauvegarde ses métadonnées en base.
      */
-    FichierResponseDTO uploadFichier(MultipartFile file, FichierUploadRequestDTO request, Long userId);
+    FichierResponseDTO uploadFichier(MultipartFile file, FichierUploadRequestDTO requestDTO, Long userId);
 
     /**
      * Retourne les métadonnées d'un fichier via son token.

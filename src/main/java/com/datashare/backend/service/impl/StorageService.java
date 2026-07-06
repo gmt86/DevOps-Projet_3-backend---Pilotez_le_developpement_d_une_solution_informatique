@@ -15,10 +15,10 @@ public interface StorageService {
      * Sauvegarde un fichier sur le disque.
      * @param file le fichier à sauvegarder
      * @param userId l'identifiant de l'utilisateur propriétaire
-     * @param fileName le nom du fichier avec UUID
+     * @param storageFileName le nom du fichier avec UUID
      * @return le chemin de stockage relatif
      */
-    String saveFile(MultipartFile file, Long userId, String fileName);
+    String saveFile(MultipartFile file, Long userId, String storageFileName);
 
     /**
      * Supprime un fichier du disque.

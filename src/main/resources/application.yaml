@@ -29,3 +29,4 @@ jwt:
 storage: 
   
   path: ${STORAGE_PATH} # Chemin du dossier de stockage des fichiers
+  forbidden-types: ${FORBIDDEN_TYPES} # Types de fichiers interdits
