@@ -3,7 +3,7 @@ spring:
     name: datashare-backend  # nom de l'application
 
   datasource:                # configuration de la connexion BDD
-    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB}  
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB}
     # adresse de la BDD : localhost = même machine, 5432 = port PostgreSQL
     username: ${POSTGRES_USER}    # utilisateur BDD
     password: ${POSTGRES_PASSWORD} # mot de passe BDD
@@ -13,20 +13,28 @@ spring:
     hibernate:
       ddl-auto: update       # crée/met à jour les tables automatiquement
     show-sql: true           # affiche les requêtes SQL dans les logs
-    open-in-view: false      # Fermée la connexion dès que possible.  
-                             #ça évite de saturer le pool de connexions PostgreSQL 
-                             #quand plusieurs utilisateurs se connectent en même temps.
+    open-in-view: false      # Ferme la connexion dès que possible
+                             # évite de saturer le pool de connexions PostgreSQL
+
+  servlet:
+    multipart:
+      enabled: true                          # active l'upload multipart
+      max-file-size: ${MAX_FILE_SIZE}        # taille maximale du fichier
+      max-request-size: ${MAX_REQUEST_SIZE}  # taille maximale de la requête
 
 server:
   port: 8080                 # port d'écoute de Spring Boot
 
 jwt:
-  
- secret: ${JWT_SECRET} # Clé secrète pour signer et valider les tokens JWT
-  
- expiration: ${JWT_EXPIRATION} # Durée d'expiration du token en millisecondes
+  secret: ${JWT_SECRET}         # clé secrète pour signer et valider les tokens JWT
+  expiration: ${JWT_EXPIRATION} # durée d'expiration du token en millisecondes
 
-storage: 
-  
-  path: ${STORAGE_PATH} # Chemin du dossier de stockage des fichiers
-  forbidden-types: ${FORBIDDEN_TYPES} # Types de fichiers interdits
+storage:
+  path: ${STORAGE_PATH}                  # chemin du dossier de stockage des fichiers
+  forbidden-types: ${FORBIDDEN_TYPES}    # types de fichiers interdits
+
+logging:
+  level:
+    com.datashare.backend: DEBUG  # traces dans la console
+    rg.springframework.security: DEBUG
+    org.springframework.web: DEBUG

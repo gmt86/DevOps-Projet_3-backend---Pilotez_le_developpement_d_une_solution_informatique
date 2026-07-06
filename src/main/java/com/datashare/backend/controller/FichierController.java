@@ -42,7 +42,12 @@ public class FichierController {
             @AuthenticationPrincipal Utilisateur utilisateur ) //@AuthenticationPrincipal est injecté par Spring Security depuis le token JWT car l'utilisateur est déjà authentifié et validé avant d'arriver ici.
             
             {
-        log.debug("POST /api/fichiers - user: {}", utilisateur.getId());
+                log.info("=== POST /api/fichiers - user: {} ===", utilisateur.getId());
+                // log.debug("POST /api/fichiers - user: {}", utilisateur.getId());
+                log.debug("File name: {}", file.getOriginalFilename());
+                log.debug("File size: {}", file.getSize());
+                log.debug("Request: {}", requestDTO);
+       
         FichierResponseDTO response = fichierService.uploadFichier(file, requestDTO, utilisateur.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
