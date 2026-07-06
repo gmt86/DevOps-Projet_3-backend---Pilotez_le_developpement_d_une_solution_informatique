@@ -18,6 +18,7 @@ public enum ErrorCode {
     FILE_EXPIRED(410, "Ce lien a expiré."),
 
     // Fichiers
+    MISSING_FILE(400, "Le fichier est obligatoire."),
     FILE_TOO_LARGE(400, "La taille du fichier dépasse la limite autorisée"),
     INVALID_FILE_TYPE(400, "Type de fichier non autorisé"),
 

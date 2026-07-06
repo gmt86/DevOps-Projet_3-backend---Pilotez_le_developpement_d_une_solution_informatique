@@ -6,6 +6,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +42,14 @@ public class GlobalExceptionHandler {
         Map<String, String> error = new HashMap<>();
         error.put("message", ErrorCode.INVALID_CREDENTIALS.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
+    // Gère les erreurs de parties multipart manquantes
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    public ResponseEntity<Map<String, String>> handleMissingPart(MissingServletRequestPartException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ErrorCode.MISSING_FILE.getMessage());
+        return ResponseEntity.status(ErrorCode.MISSING_FILE.getStatusCode()).body(error);
     }
 
     // Gère toutes les autres exceptions non prévues
