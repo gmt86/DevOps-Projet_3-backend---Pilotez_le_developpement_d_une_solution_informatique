@@ -32,6 +32,9 @@ jwt:
 storage:
   path: ${STORAGE_PATH}                  # chemin du dossier de stockage des fichiers
   forbidden-types: ${FORBIDDEN_TYPES}    # types de fichiers interdits
+  max-file-size-bytes: ${MAX_FILE_SIZE_BYTES} # Taille maximale du fichier 
+  default-expiration-days: ${DEFAULT_EXPIRATION_DAYS} # Durée d'expiration par défaut
+  max-expiration-days: ${MAX_EXPIRATION_DAYS} # Durée d'expiration maximale
 
 logging:
   level:

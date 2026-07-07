@@ -35,6 +35,7 @@ public interface FichierService {
      */
     List<FichierResponseDTO> getFichiersByUtilisateur(Long userId);
 
+    
     /**
      * Supprime un fichier.
      */

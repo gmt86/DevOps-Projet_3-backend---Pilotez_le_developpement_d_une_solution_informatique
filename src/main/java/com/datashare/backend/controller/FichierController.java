@@ -42,11 +42,8 @@ public class FichierController {
             @AuthenticationPrincipal Utilisateur utilisateur ) //@AuthenticationPrincipal est injecté par Spring Security depuis le token JWT car l'utilisateur est déjà authentifié et validé avant d'arriver ici.
             
             {
-                log.info("=== POST /api/fichiers - user: {} ===", utilisateur.getId());
-                // log.debug("POST /api/fichiers - user: {}", utilisateur.getId());
-                log.debug("File name: {}", file.getOriginalFilename());
-                log.debug("File size: {}", file.getSize());
-                log.debug("Request: {}", requestDTO);
+               
+               log.debug("POST /api/fichiers - user: {}", utilisateur.getId());             
        
         FichierResponseDTO response = fichierService.uploadFichier(file, requestDTO, utilisateur.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -67,10 +64,8 @@ public class FichierController {
      * POST /api/fichiers/{token}/download
      */
     @PostMapping("/{token}/download")
-    public ResponseEntity<Resource> downloadFichier(
-            @PathVariable UUID token,
-            @RequestParam(required = false) String password
-    ) {
+    public ResponseEntity<Resource> downloadFichier(@PathVariable UUID token, @RequestParam(required = false) String password ) 
+    {
         log.debug("POST /api/fichiers/{}/download", token);
         Resource resource = fichierService.downloadFichier(token, password);
         return ResponseEntity.ok()
@@ -85,9 +80,8 @@ public class FichierController {
      * GET /api/fichiers
      */
     @GetMapping
-    public ResponseEntity<List<FichierResponseDTO>> getFichiers(
-            @AuthenticationPrincipal Utilisateur utilisateur
-    ) {
+    public ResponseEntity<List<FichierResponseDTO>> getFichiers(@AuthenticationPrincipal Utilisateur utilisateur ) 
+    {
         log.debug("GET /api/fichiers - user: {}", utilisateur.getId());
         return ResponseEntity.ok(fichierService.getFichiersByUtilisateur(utilisateur.getId()));
     }
@@ -97,10 +91,8 @@ public class FichierController {
      * DELETE /api/fichiers/{id}
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFichier(
-            @PathVariable UUID id,
-            @AuthenticationPrincipal Utilisateur utilisateur
-    ) {
+    public ResponseEntity<Void> deleteFichier(@PathVariable UUID id,  @AuthenticationPrincipal Utilisateur utilisateur ) 
+    {
         log.debug("DELETE /api/fichiers/{} - user: {}", id, utilisateur.getId());
         fichierService.deleteFichier(id, utilisateur.getId());
         return ResponseEntity.noContent().build();

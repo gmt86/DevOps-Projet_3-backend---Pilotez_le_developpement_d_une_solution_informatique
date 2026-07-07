@@ -41,9 +41,7 @@ public class FichierServiceImpl implements FichierService {
     private final PasswordEncoder passwordEncoder;
     private final StorageConfigProperties storageConfigProperties;
 
-  
-    // Taille maximale : 1 Go en octets
-    private static final long MAX_FILE_SIZE = 1024L * 1024L * 1024L;
+     
 
     /**
      * Upload un fichier — vérifie les contraintes, sauvegarde physiquement
@@ -63,7 +61,7 @@ public class FichierServiceImpl implements FichierService {
 
 
             // Vérification taille
-            if (file.getSize() > MAX_FILE_SIZE) {
+            if (file.getSize() > storageConfigProperties.maxFileSizeBytes()) {
                 throw new AppException(ErrorCode.FILE_TOO_LARGE);
             }
 
@@ -86,9 +84,7 @@ public class FichierServiceImpl implements FichierService {
             String cheminStockage = storageService.saveFile(file, userId, storageFileName);
 
             // Encodage du mot de passe si présent
-            String encodedPassword = requestDTO.getPassword() != null
-                    ? passwordEncoder.encode(requestDTO.getPassword())
-                    : null;
+            String encodedPassword = requestDTO.getPassword() != null ? passwordEncoder.encode(requestDTO.getPassword()) : null;
 
             // Construction de l'entité Fichier
             Fichier fichier = Fichier.builder()
