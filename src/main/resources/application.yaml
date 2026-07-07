@@ -16,11 +16,11 @@ spring:
     open-in-view: false      # Ferme la connexion dès que possible
                              # évite de saturer le pool de connexions PostgreSQL
 
-  servlet:
+  servlet:                   # verification niveau spring boot
     multipart:
-      enabled: true                          # active l'upload multipart
-      max-file-size: ${MAX_FILE_SIZE}        # taille maximale du fichier
-      max-request-size: ${MAX_REQUEST_SIZE}  # taille maximale de la requête
+      enabled: true          # active l'upload multipart
+      max-file-size: 1GB     # taille maximale du fichier pour validation au niveau du serveur Tomcat 
+      max-request-size: 1GB  # taille maximale de la requête
 
 server:
   port: 8080                 # port d'écoute de Spring Boot
@@ -29,15 +29,15 @@ jwt:
   secret: ${JWT_SECRET}         # clé secrète pour signer et valider les tokens JWT
   expiration: ${JWT_EXPIRATION} # durée d'expiration du token en millisecondes
 
-storage:
+storage:                                 # verification niveau metier (java)
   path: ${STORAGE_PATH}                  # chemin du dossier de stockage des fichiers
   forbidden-types: ${FORBIDDEN_TYPES}    # types de fichiers interdits
-  max-file-size-bytes: ${MAX_FILE_SIZE_BYTES} # Taille maximale du fichier 
+  max-file-size-bytes: ${MAX_FILE_SIZE_BYTES} # Taille maximale du fichier pour Validation niveau métier
   default-expiration-days: ${DEFAULT_EXPIRATION_DAYS} # Durée d'expiration par défaut
   max-expiration-days: ${MAX_EXPIRATION_DAYS} # Durée d'expiration maximale
 
 logging:
   level:
     com.datashare.backend: DEBUG  # traces dans la console
-    rg.springframework.security: DEBUG
+    org.springframework.security: DEBUG
     org.springframework.web: DEBUG
