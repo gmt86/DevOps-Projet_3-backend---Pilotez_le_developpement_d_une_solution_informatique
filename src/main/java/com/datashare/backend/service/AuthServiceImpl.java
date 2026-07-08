@@ -41,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
      * et retourne un token JWT.
      */
     @Override
-    public AuthResponseDTO register(RegisterRequestDTO request) {
+    public void register(RegisterRequestDTO request) {
         log.debug("Registering new user with email: {}", request.getEmail());
 
         if (utilisateurRepository.existsByEmail(request.getEmail())) {
@@ -58,9 +58,7 @@ public class AuthServiceImpl implements AuthService {
             log.error("Database error while saving user: {}", e.getMessage());
             throw new AppException(ErrorCode.DATABASE_ERROR);
         }
-
-        String token = jwtServiceImpl.generateToken(utilisateur);
-        return new AuthResponseDTO(token);
+        
     }
 
     /**

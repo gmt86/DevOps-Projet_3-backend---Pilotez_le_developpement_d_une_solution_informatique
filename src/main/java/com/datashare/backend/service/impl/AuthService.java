@@ -10,9 +10,9 @@ import com.datashare.backend.dto.auth.RegisterRequestDTO;
 public interface AuthService {
 
     /**
-     * Inscrit un nouvel utilisateur et retourne un token JWT.
+     * Inscrit un nouvel utilisateur .
      */
-    AuthResponseDTO register(RegisterRequestDTO request);
+    void register(RegisterRequestDTO request);
 
     /**
      * Connecte un utilisateur existant et retourne un token JWT.
