@@ -63,12 +63,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      */
     private boolean isPublicEndpoint(HttpServletRequest request) {
     String path = request.getRequestURI();
+    String method = request.getMethod();
+    
     return path.startsWith("/api/auth/register")
             || path.startsWith("/api/auth/login")
-            || path.matches("/api/fichiers/[^/]+")           // GET métadonnées
-            || path.matches("/api/fichiers/[^/]+/download");  // POST téléchargement
+            || (path.matches("/api/fichiers/[^/]+") && method.equals("GET"))
+            || path.matches("/api/fichiers/[^/]+/download");
     }
-
     /**
      * Vérifie si l'en-tête Authorization est valide.
      */
