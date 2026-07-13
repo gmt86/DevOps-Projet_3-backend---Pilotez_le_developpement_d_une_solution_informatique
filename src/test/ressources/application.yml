@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: datashare-backend-test  # nom de l'application en mode test
+
+  datasource:                # même BDD PostgreSQL que le développement
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop  # recrée les tables à chaque test — isolation garantie
+    show-sql: true
+    open-in-view: false
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 1GB
+      max-request-size: 1GB
+
+server:
+  port: 8080
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
+
+storage:
+  path: ./test-uploads              # dossier séparé pour les fichiers de test
+  forbidden-types: ${FORBIDDEN_TYPES}
+  max-file-size-bytes: ${MAX_FILE_SIZE_BYTES}
+  default-expiration-days: ${DEFAULT_EXPIRATION_DAYS}
+  max-expiration-days: ${MAX_EXPIRATION_DAYS}
+
+logging:
+  level:
+    com.datashare.backend: DEBUG    
