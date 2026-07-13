@@ -3,6 +3,7 @@ package com.datashare.backend.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -76,11 +77,12 @@ public class SecurityConfig {
                 .sessionManagement(management -> management
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))                
                 .authorizeHttpRequests(authorize -> authorize
-                        // Endpoints publics
-                        .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
-                        .requestMatchers("/api/fichiers/{token}", "/api/fichiers/{token}/download").permitAll()
-                        // Tous les autres endpoints nécessitent une authentification
-                        .anyRequest().authenticated()
+                // Endpoints publics
+                .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/fichiers/*").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/fichiers/*/download").permitAll()
+                // Tous les autres endpoints nécessitent une authentification
+                .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exceptionHandling -> exceptionHandling
