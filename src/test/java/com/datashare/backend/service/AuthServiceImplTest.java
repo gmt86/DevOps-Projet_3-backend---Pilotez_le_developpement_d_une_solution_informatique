@@ -72,34 +72,34 @@ class AuthServiceImplTest {
     /**
      * Test US03 — Inscription réussie d'un nouvel utilisateur.
      */
-    @Test
-    void register_shouldSucceed_whenEmailNotExists() {
-        // Given
-        when(utilisateurRepository.existsByEmail(registerRequest.getEmail())).thenReturn(false);
-        when(utilisateurMapper.toEntity(registerRequest)).thenReturn(utilisateur);
-        when(passwordEncoder.encode(registerRequest.getPassword())).thenReturn("encodedPassword");
+        @Test
+        void register_shouldSucceed_whenEmailNotExists() {
+            // Given
+            when(utilisateurRepository.existsByEmail(registerRequest.getEmail())).thenReturn(false);
+            when(utilisateurMapper.toEntity(registerRequest)).thenReturn(utilisateur);
+            when(passwordEncoder.encode(registerRequest.getPassword())).thenReturn("encodedPassword");
 
-        // When
-        authService.register(registerRequest);
+            // When
+            authService.register(registerRequest);
 
-        // Then
-        verify(utilisateurRepository, times(1)).save(any(Utilisateur.class));
-    }
+            // Then
+            verify(utilisateurRepository, times(1)).save(any(Utilisateur.class));
+        }
 
-    /**
-     * Test US03 — Inscription échouée si email déjà utilisé.
-     */
-    @Test
-    void register_shouldThrowException_whenEmailAlreadyExists() {
-        // Given
-        when(utilisateurRepository.existsByEmail(registerRequest.getEmail())).thenReturn(true);
+        /**
+         * Test US03 — Inscription échouée si email déjà utilisé.
+         */
+        @Test
+        void register_shouldThrowException_whenEmailAlreadyExists() {
+            // Given
+            when(utilisateurRepository.existsByEmail(registerRequest.getEmail())).thenReturn(true);
 
-        // When / Then
-        assertThatThrownBy(() -> authService.register(registerRequest))
-                .isInstanceOf(AppException.class);
+            // When / Then
+            assertThatThrownBy(() -> authService.register(registerRequest))
+                    .isInstanceOf(AppException.class);
 
-        verify(utilisateurRepository, never()).save(any());
-    }
+            verify(utilisateurRepository, never()).save(any());
+        }
 
     /**
      * Test US04 — Connexion réussie avec credentials valides.
