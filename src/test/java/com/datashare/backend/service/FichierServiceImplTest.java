@@ -213,4 +213,80 @@ class FichierServiceImplTest {
 
         verify(storageService, never()).deleteFile(any());
     }
+
+
+        /**
+ * Test US01 — Upload échoué si type de fichier interdit.
+ */
+@Test
+void uploadFichier_shouldThrowException_whenFileTypeIsForbidden() {
+    // Given
+    when(storageConfigProperties.maxFileSizeBytes()).thenReturn(1073741824L);
+    when(storageConfigProperties.forbiddenTypes()).thenReturn("application/x-msdownload,application/x-bat");
+
+    MockMultipartFile forbiddenFile = new MockMultipartFile(
+            "fichier", "virus.exe", "application/x-msdownload", "contenu".getBytes()
+    );
+
+    // When / Then
+    assertThatThrownBy(() -> fichierService.uploadFichier(forbiddenFile, uploadRequest, 1L))
+            .isInstanceOf(AppException.class);
+
+    verify(fichierRepository, never()).save(any());
+}
+
+/**
+ * Test US02 — Téléchargement échoué si fichier expiré.
+ */
+@Test
+void downloadFichier_shouldThrowException_whenFichierIsExpired() {
+    // Given
+    fichier = Fichier.builder()
+            .id(UUID.randomUUID())
+            .utilisateur(utilisateur)
+            .nom("test.pdf")
+            .typeFichier("application/pdf")
+            .taille(1024L)
+            .dateExpiration(LocalDateTime.now().minusDays(1)) // expiré
+            .tokenTelechargement(UUID.randomUUID())
+            .cheminStockage("1/test.pdf")
+            .build();
+
+    UUID token = fichier.getTokenTelechargement();
+    when(fichierRepository.findByTokenTelechargement(token)).thenReturn(Optional.of(fichier));
+    when(fichierMapper.isExpire(fichier)).thenReturn(true);
+
+    // When / Then
+    assertThatThrownBy(() -> fichierService.downloadFichier(token, null))
+            .isInstanceOf(AppException.class);
+}
+
+/**
+ * Test US02 — Téléchargement échoué si mauvais mot de passe.
+ */
+@Test
+void downloadFichier_shouldThrowException_whenPasswordIsWrong() {
+    // Given
+    fichier = Fichier.builder()
+            .id(UUID.randomUUID())
+            .utilisateur(utilisateur)
+            .nom("test.pdf")
+            .typeFichier("application/pdf")
+            .taille(1024L)
+            .dateExpiration(LocalDateTime.now().plusDays(7))
+            .password("encodedPassword")
+            .tokenTelechargement(UUID.randomUUID())
+            .cheminStockage("1/test.pdf")
+            .build();
+
+    UUID token = fichier.getTokenTelechargement();
+    when(fichierRepository.findByTokenTelechargement(token)).thenReturn(Optional.of(fichier));
+    when(fichierMapper.isExpire(fichier)).thenReturn(false);
+    when(passwordEncoder.matches("wrongPassword", "encodedPassword")).thenReturn(false);
+
+    // When / Then
+    assertThatThrownBy(() -> fichierService.downloadFichier(token, "wrongPassword"))
+            .isInstanceOf(AppException.class);
+}
+
 }
