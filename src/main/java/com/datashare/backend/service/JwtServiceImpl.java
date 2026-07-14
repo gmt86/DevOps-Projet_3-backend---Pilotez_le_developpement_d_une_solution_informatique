@@ -1,5 +1,7 @@
 package com.datashare.backend.service;
 
+import com.datashare.backend.exception.AppException;
+import com.datashare.backend.exception.ErrorCode;
 import com.datashare.backend.security.JwtConfigProperties;
 import com.datashare.backend.service.impl.JwtService;
 import io.jsonwebtoken.Claims;
@@ -65,7 +67,12 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+            try {
+            return extractExpiration(token).before(new Date());
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            log.warn("Token expiré : {}", e.getMessage());
+            throw new AppException(ErrorCode.TOKEN_EXPIRED);
+        }
     }
 
     /**

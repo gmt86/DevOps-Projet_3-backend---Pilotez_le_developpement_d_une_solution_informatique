@@ -9,7 +9,7 @@ public enum ErrorCode {
     // Auth
     EMAIL_ALREADY_EXISTS(409, "Email déjà utilisé"),
     INVALID_CREDENTIALS(401, "Email ou mot de passe incorrect"),
-   
+    TOKEN_EXPIRED(401, "Le token a expiré."),
 
     // Ressources    
     RESOURCE_NOT_FOUND(404, "Ressource non trouvée"),
