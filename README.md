@@ -113,8 +113,8 @@ k6 run k6/upload-test.js
 ---
 
 ## 📁 Structure du projet
-![structure backend](./docs/screenshots/backend-structure-1.png)
-![structure backend](./docs/screenshots/backend-structure-2.png)
+![Structure backend](https://raw.githubusercontent.com/gmt86/DevOps-Projet_3-docs---Pilotez_le_developpement_d_une_solution_informatique/main/screenshots/backend-structure-1.png)
+![Structure backend](https://raw.githubusercontent.com/gmt86/DevOps-Projet_3-docs---Pilotez_le_developpement_d_une_solution_informatique/main/screenshots/backend-structure-2.png)
 
 
 ---
