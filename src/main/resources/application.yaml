@@ -38,6 +38,6 @@ storage:                                 # verification niveau metier (java)
 
 logging:
   level:
-    com.datashare.backend: DEBUG  # traces dans la console
-    org.springframework.security: DEBUG
-    org.springframework.web: DEBUG
+    com.datashare.backend: DEBUG  # traces dans la console: nos logs métier
+    org.springframework.security: WARN # masquer les détails Spring Security
+    org.springframework.web: WARN # masquer les détails HTTP (body inclus)
