@@ -116,6 +116,7 @@ class FichierServiceImplTest {
 
     /**
      * Test US01 — Upload échoué si fichier trop grand.
+     * Test sécurité — fichier trop volumineux refusé.
      */
     @Test
     void uploadFichier_shouldThrowException_whenFileTooLarge() {
@@ -200,6 +201,7 @@ class FichierServiceImplTest {
 
     /**
      * Test US06 — Exception si utilisateur non propriétaire.
+     * utilisateur B ne peut pas supprimer le fichier de A 
      */
     @Test
     void deleteFichier_shouldThrowException_whenUserIsNotOwner() {
@@ -207,7 +209,7 @@ class FichierServiceImplTest {
         UUID fichierId = fichier.getId();
         when(fichierRepository.findById(fichierId)).thenReturn(Optional.of(fichier));
 
-        // When / Then
+        // When / Then — utilisateur 99 tente de supprimer le fichier de l'utilisateur 1
         assertThatThrownBy(() -> fichierService.deleteFichier(fichierId, 99L))
                 .isInstanceOf(AppException.class);
 
@@ -288,5 +290,30 @@ void downloadFichier_shouldThrowException_whenPasswordIsWrong() {
     assertThatThrownBy(() -> fichierService.downloadFichier(token, "wrongPassword"))
             .isInstanceOf(AppException.class);
 }
+
+
+       
+
+        /**
+         * Test sécurité — contournement MIME refusé (exe déclaré comme text/plain).
+         */
+        @Test
+        void uploadFichier_shouldThrowException_whenMimeTypeBypass() {
+        // Given
+        when(storageConfigProperties.maxFileSizeBytes()).thenReturn(1073741824L);
+        when(storageConfigProperties.allowedTypes()).thenReturn("application/pdf,image/jpeg");
+
+        // Fichier exe avec magic bytes MZ déclaré comme text/plain
+        MockMultipartFile bypassFile = new MockMultipartFile(
+                "fichier", "virus.exe", "text/plain", "MZ".getBytes()
+        );
+
+        // When / Then
+        assertThatThrownBy(() -> fichierService.uploadFichier(bypassFile, uploadRequest, 1L))
+                .isInstanceOf(AppException.class);
+
+        verify(fichierRepository, never()).save(any());
+        }
+
 
 }
