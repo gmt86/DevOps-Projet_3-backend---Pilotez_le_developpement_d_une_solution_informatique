@@ -1,5 +1,6 @@
 package com.datashare.backend.controller;
 
+import com.datashare.backend.dto.file.DownloadRequestDTO;
 import com.datashare.backend.dto.file.FichierResponseDTO;
 import com.datashare.backend.dto.file.FichierUploadRequestDTO;
 import com.datashare.backend.entity.Utilisateur;
@@ -64,12 +65,13 @@ public class FichierController {
      * POST /api/fichiers/{token}/download
      */
     @PostMapping("/{token}/download")
-    public ResponseEntity<Resource> downloadFichier(@PathVariable UUID token, @RequestParam(required = false) String password ) 
+    public ResponseEntity<Resource> downloadFichier(@PathVariable UUID token, @RequestBody(required = false) DownloadRequestDTO request ) 
     {
         log.debug("POST /api/fichiers/{}/download", token);
+        String password = request != null ? request.getPassword() : null;
         Resource resource = fichierService.downloadFichier(token, password);
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION,
+                .header(HttpHeaders.CONTENT_DISPOSITION,        
                         "attachment; filename=\"" + resource.getFilename() + "\"")
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
