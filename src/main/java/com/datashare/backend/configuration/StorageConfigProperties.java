@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "storage")
 public record StorageConfigProperties(
     String path , 
-    String forbiddenTypes , 
+    String allowedTypes,        // Types autorises
     long maxFileSizeBytes, 
     int defaultExpirationDays,  
-    int maxExpirationDays) {}
+    int maxExpirationDays) {}       

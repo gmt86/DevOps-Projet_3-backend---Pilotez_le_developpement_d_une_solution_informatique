@@ -99,7 +99,7 @@ class FichierServiceImplTest {
     void uploadFichier_shouldSucceed_whenFileIsValid() {
         // Given
         when(storageConfigProperties.maxFileSizeBytes()).thenReturn(1073741824L);
-        when(storageConfigProperties.forbiddenTypes()).thenReturn("application/x-msdownload");
+        when(storageConfigProperties.allowedTypes()).thenReturn("application/pdf,image/jpeg,image/png,text/plain");   
         when(utilisateurRepository.findById(1L)).thenReturn(Optional.of(utilisateur));
         when(storageService.saveFile(any(), any(), any())).thenReturn("1/test.pdf");
         when(fichierRepository.save(any(Fichier.class))).thenReturn(fichier);
@@ -222,10 +222,10 @@ class FichierServiceImplTest {
 void uploadFichier_shouldThrowException_whenFileTypeIsForbidden() {
     // Given
     when(storageConfigProperties.maxFileSizeBytes()).thenReturn(1073741824L);
-    when(storageConfigProperties.forbiddenTypes()).thenReturn("application/x-msdownload,application/x-bat");
-
+    when(storageConfigProperties.allowedTypes()).thenReturn("application/pdf,image/jpeg,image/png,text/plain"); 
+    // change le fichier de test pour qu'il soit d'un type non autorisé
     MockMultipartFile forbiddenFile = new MockMultipartFile(
-            "fichier", "virus.exe", "application/x-msdownload", "contenu".getBytes()
+            "fichier", "virus.exe", "application/x-msdownload", "MZ".getBytes() // magic bytes exe
     );
 
     // When / Then

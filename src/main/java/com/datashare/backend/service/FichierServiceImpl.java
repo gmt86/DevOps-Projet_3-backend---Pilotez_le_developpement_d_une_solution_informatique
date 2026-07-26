@@ -24,6 +24,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.apache.tika.Tika;
 
 /**
  * Implémentation du service métier pour la gestion des fichiers.
@@ -65,11 +66,19 @@ public class FichierServiceImpl implements FichierService {
                 throw new AppException(ErrorCode.FILE_TOO_LARGE);
             }
 
-            // chargement liste de type de fichier interdite
-            List<String> forbiddenTypes = List.of(storageConfigProperties.forbiddenTypes().split(",") );
+            // Détection du type réel via Apache Tika (magic bytes)
+            Tika tika = new Tika();
+            String realContentType = tika.detect(file.getBytes());
 
-            // Vérification type de fichier
-            if (forbiddenTypes.contains(typeFichier)) {
+            log.debug("Type déclaré: {}, Type réel détecté: {}", typeFichier, realContentType);
+
+
+            // chargement Liste blanche des types autorisés
+            List<String> allowedTypes = List.of(storageConfigProperties.allowedTypes().split(",") );
+
+            // Vérification du type réel (pas celui déclaré par le client)
+            if (!allowedTypes.contains(realContentType)) {
+                 log.warn("Type de fichier refusé: {} (déclaré: {})", realContentType, typeFichier);
                 throw new AppException(ErrorCode.INVALID_FILE_TYPE);
             }
 

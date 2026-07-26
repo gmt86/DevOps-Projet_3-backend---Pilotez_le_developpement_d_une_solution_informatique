@@ -31,7 +31,7 @@ jwt:
 
 storage:                                 # verification niveau metier (java)
   path: ${STORAGE_PATH}                  # chemin du dossier de stockage des fichiers
-  forbidden-types: ${FORBIDDEN_TYPES}    # types de fichiers interdits
+  forbidden-types: ${ALLOWED_TYPES}    # types de fichiers autorises
   max-file-size-bytes: ${MAX_FILE_SIZE_BYTES} # Taille maximale du fichier pour Validation niveau métier
   default-expiration-days: ${DEFAULT_EXPIRATION_DAYS} # Durée d'expiration par défaut
   max-expiration-days: ${MAX_EXPIRATION_DAYS} # Durée d'expiration maximale
