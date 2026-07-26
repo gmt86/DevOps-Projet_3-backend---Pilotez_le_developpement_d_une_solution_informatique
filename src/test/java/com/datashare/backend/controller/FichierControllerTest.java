@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 
 /**
  * Tests du contrôleur de gestion des fichiers.
@@ -156,5 +156,31 @@ class FichierControllerTest {
     }
 
 
+
+        /**
+     * Test — upload fichier réussi avec authentification.
+     */
+    @Test
+    void uploadFichier_shouldReturn201_whenAuthenticated() throws Exception {
+        // Given
+        authenticateUser();
+        when(fichierService.uploadFichier(any(), any(), any()))
+                .thenReturn(fichierResponse);
+
+        MockMultipartFile file = new MockMultipartFile(
+                "fichier", "test.pdf", "application/pdf", "contenu".getBytes()
+        );
+
+        String requestJson = "{\"dateExpiration\":\"2026-07-30T10:00:00\"}";
+        MockMultipartFile request = new MockMultipartFile(
+                "request", "", "application/json", requestJson.getBytes()
+        );
+
+        // When / Then
+        mockMvc.perform(multipart("/api/fichiers")
+                .file(file)
+                .file(request))
+                .andExpect(status().isCreated());
+    }
 
 }
