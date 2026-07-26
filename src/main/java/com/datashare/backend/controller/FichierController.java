@@ -5,6 +5,9 @@ import com.datashare.backend.dto.file.FichierResponseDTO;
 import com.datashare.backend.dto.file.FichierUploadRequestDTO;
 import com.datashare.backend.entity.Utilisateur;
 import com.datashare.backend.service.impl.FichierService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +31,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/fichiers")
 @RequiredArgsConstructor
+@Tag(name = "Fichiers", description = "Endpoints de gestion des fichiers")
 public class FichierController {
 
     private final FichierService fichierService;
@@ -36,6 +40,7 @@ public class FichierController {
      * Upload un fichier.
      * POST /api/fichiers
      */
+    @Operation(summary = "Upload fichier", description = "Upload un fichier avec date d'expiration optionnelle et mot de passe")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<FichierResponseDTO> uploadFichier(
             @RequestPart("fichier") MultipartFile file,// si fichier abscent, MissingServletRequestPartException de GlobalExceptionHandler est lancée par Spring avant d'entrer dans le contrôleur
@@ -54,6 +59,7 @@ public class FichierController {
      * Retourne les métadonnées d'un fichier via son token.
      * GET /api/fichiers/{token}
      */
+    @Operation(summary = "Métadonnées fichier", description = "Retourne les métadonnées d'un fichier via son token")
     @GetMapping("/{token}")
     public ResponseEntity<FichierResponseDTO> getFichierByToken(@PathVariable UUID token) {
         log.debug("GET /api/fichiers/{}", token);
@@ -64,6 +70,7 @@ public class FichierController {
      * Télécharge un fichier via son token.
      * POST /api/fichiers/{token}/download
      */
+    @Operation(summary = "Télécharger fichier", description = "Télécharge un fichier via son token avec mot de passe optionnel dans le body")
     @PostMapping("/{token}/download")
     public ResponseEntity<Resource> downloadFichier(@PathVariable UUID token, @RequestBody(required = false) DownloadRequestDTO request ) 
     {
@@ -81,6 +88,7 @@ public class FichierController {
      * Retourne l'historique des fichiers de l'utilisateur connecté.
      * GET /api/fichiers
      */
+    @Operation(summary = "Historique fichiers", description = "Retourne la liste des fichiers de l'utilisateur connecté")
     @GetMapping
     public ResponseEntity<List<FichierResponseDTO>> getFichiers(@AuthenticationPrincipal Utilisateur utilisateur ) 
     {
@@ -92,6 +100,7 @@ public class FichierController {
      * Supprime un fichier.
      * DELETE /api/fichiers/{id}
      */
+    @Operation(summary = "Supprimer fichier", description = "Supprime un fichier appartenant à l'utilisateur connecté")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFichier(@PathVariable UUID id,  @AuthenticationPrincipal Utilisateur utilisateur ) 
     {

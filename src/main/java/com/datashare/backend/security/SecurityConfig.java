@@ -81,6 +81,10 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/fichiers/*").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/fichiers/*/download").permitAll()
+
+                 // Swagger UI — accès public
+                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/api-docs/**",  "/v3/api-docs/**" ).permitAll()
+
                 // Tous les autres endpoints nécessitent une authentification
                 .anyRequest().authenticated()
                 )
